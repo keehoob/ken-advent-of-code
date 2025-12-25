@@ -1,12 +1,21 @@
-use anyhow::Result;
+//imports
+
+//importing Result - lets you decide okay and error
+//anyhow is an alias that 
+use anyhow::Result; 
+//run_day is helper is more specific to advent of code that helps run the code on a specific day
 use aoc_2025::run_day;
+//hash map is like a python dictionary
+//FnvHashMap optimizes speed, but trades collision resistance
 use fnv::FnvHashMap;
 
+//[type, num wanted]
 type NodeId = [u8; 3];
 type Graph = FnvHashMap<NodeId, Vec<NodeId>>;
 
 const END: NodeId = [b'o', b'u', b't'];
 
+//Takes a string as an input and outputs Result which will either be Ok or error
 fn part1(s: &str) -> Result<u64> {
     const START: NodeId = [b'y', b'o', b'u'];
     let graph = parse_graph(s)?;
@@ -17,8 +26,11 @@ fn part1(s: &str) -> Result<u64> {
 }
 
 fn parse_graph(s: &str) -> Result<Graph> {
+    //iterator of strings where each string is a line in the original string
     s.lines()
+        //filtering out strings shorter than 5 bytes long
         .filter(|line| line.len() > 5)
+        //takes iterator element as input and returns something else, 
         .map(|line| {
             let dsts = line.as_bytes()[5..]
                 .windows(3)
